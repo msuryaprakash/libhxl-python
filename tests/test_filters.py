@@ -247,6 +247,58 @@ class TestAddColumnsFilter(AbstractBaseFilterTest):
             self.source.add_columns('Country#country={{#sector}}').values
         )
 
+    def test_sum(self):
+        DATA_IN = [
+            ['#affected+f', '#affected+m'],
+            ['100', '200']
+        ]
+        DATA_OUT = [
+            ['#affected+f', '#affected+m', '#affected+total'],
+            ['100', '200', '300']
+        ]
+        source = hxl.data(DATA_IN)
+        filtered = source.add_columns('#affected+total={{sum(#affected+f,#affected+m)}}')
+        self.assertEqual(DATA_IN[1:], filtered.values)
+
+    def test_average(self):
+        DATA_IN = [
+            ['#affected+f', '#affected+m'],
+            ['100', '200']
+        ]
+        DATA_OUT = [
+            ['#affected+f', '#affected+m', '#affected+total'],
+            ['100', '200', '150']
+        ]
+        source = hxl.data(DATA_IN)
+        filtered = source.add_columns('#affected+total={{average(#affected+f,#affected+m)}}')
+        self.assertEqual(DATA_IN[1:], filtered.values)
+
+    def test_min(self):
+        DATA_IN = [
+            ['#affected+f', '#affected+m'],
+            ['100', '200']
+        ]
+        DATA_OUT = [
+            ['#affected+f', '#affected+m', '#affected+total'],
+            ['100', '200', '100']
+        ]
+        source = hxl.data(DATA_IN)
+        filtered = source.add_columns('#affected+total={{min(#affected+f,#affected+m)}}')
+        self.assertEqual(DATA_IN[1:], filtered.values)
+
+    def test_max(self):
+        DATA_IN = [
+            ['#affected+f', '#affected+m'],
+            ['100', '200']
+        ]
+        DATA_OUT = [
+            ['#affected+f', '#affected+m', '#affected+total'],
+            ['100', '200', '200']
+        ]
+        source = hxl.data(DATA_IN)
+        filtered = source.add_columns('#affected+total={{max(#affected+f,#affected+m)}}')
+        self.assertEqual(DATA_IN[1:], filtered.values)
+
 
 class TestAppendFilter(AbstractBaseFilterTest):
 
